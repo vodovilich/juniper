@@ -1,0 +1,21 @@
+-switch
+set interfaces ge-0/0/0 unit 0 family ethernet-switching interface-mode trunk
+set interfaces ge-0/0/0 unit 0 family ethernet-switching vlan members 30
+set interfaces ge-0/0/1 unit 0 family ethernet-switching interface-mode access
+set interfaces ge-0/0/1 unit 0 family ethernet-switching vlan members vlan30
+set vlans vlan30 vlan-id 30
+
+-router
+set interfaces ge-0/0/0 vlan-tagging
+set interfaces ge-0/0/0 unit 30 vlan-id 30
+set interfaces ge-0/0/0 unit 30 family inet address 192.168.30.1/30
+
+-misc
+Operat0r
+delete chassis auto-image-upgrade
+show chassis fpc
+show int terse
+vrouter: CPU=3, RAM=4096
+vswitch: CPU=3 RAM=4096
+VFP: CPU=3, RAM=4096
+VCP: CPU=1, RAM=2048
