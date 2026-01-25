@@ -2,8 +2,11 @@
 set interfaces ge-0/0/0 unit 0 family ethernet-switching interface-mode trunk
 set interfaces ge-0/0/0 unit 0 family ethernet-switching vlan members 30
 set interfaces ge-0/0/1 unit 0 family ethernet-switching interface-mode access
-set interfaces ge-0/0/1 unit 0 family ethernet-switching vlan members vlan30
-set vlans vlan30 vlan-id 30
+set interfaces ge-0/0/1 unit 0 family ethernet-switching vlan members 30
+set vlans VLAN30 vlan-id 30
+set interfaces irb unit 30 family inet address 192.168.30.10/24
+set routing-options static route 0.0.0.0/0 next-hop 192.168.30.1
+set vlans VLAN30 l3-interface irb.30
 
 -router
 set interfaces ge-0/0/0 vlan-tagging
