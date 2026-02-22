@@ -135,3 +135,103 @@ set protocols ldp interface ge-0/0/0.0
 set protocols ldp interface lo0.0
 set protocols mpls interface ge-0/0/0.0
 ```
+
+## CE1-R1
+```
+CE1-R1#
+hostname CE1-R1
+!
+interface Ethernet0/0
+ ip address 192.168.200.10 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
+interface Ethernet0/1
+ no ip address
+interface Ethernet0/1.101
+ description EXTERNAL
+ encapsulation dot1Q 101
+ ip address 192.168.0.1 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+interface Ethernet0/1.102
+ description INTERNAL
+ encapsulation dot1Q 102
+ ip address 192.168.0.5 255.255.255.252
+ ip nat inside
+ ip virtual-reassembly in
+interface Ethernet0/1.110
+ encapsulation dot1Q 110
+ ip address 10.110.10.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+interface Ethernet0/1.120
+ encapsulation dot1Q 120
+ ip address 10.110.20.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+interface Ethernet0/2
+ ip address 192.168.11.2 255.255.255.0
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+router bgp 65601
+ bgp log-neighbor-changes
+ network 10.110.0.0 mask 255.255.0.0
+ neighbor 192.168.11.1 remote-as 65530
+ neighbor 192.168.11.1 description PE1
+ neighbor 192.168.11.1 allowas-in
+!
+ip access-list extended NAT-ACL
+ permit ip 10.0.0.0 0.255.255.255 any
+!
+route-map NAT-RMAP permit 10
+ match ip address NAT-ACL
+ match interface Ethernet0/0
+!
+ip nat inside source route-map NAT-RMAP interface Ethernet0/0 overload
+ip route 0.0.0.0 0.0.0.0 192.168.200.1
+ip route 10.110.0.0 255.255.0.0 Null0 name BLACKHOLE
+ip route 10.110.30.0 255.255.255.0 192.168.0.6 name L2TP clients
+ip route 192.168.200.11 255.255.255.255 Ethernet0/1.101 192.168.0.2 name L2TP Mikrotik
+
+## CE1-R2
+```
+CE1-R2#
+hostname CE1-R2
+!
+interface Ethernet0/0
+ ip address 192.168.200.20 255.255.255.0
+ ip nat outside
+ ip virtual-reassembly in
+interface Ethernet0/1
+ no ip address
+interface Ethernet0/1.120
+ encapsulation dot1Q 120
+ ip address 10.120.20.1 255.255.255.0
+ ip nat inside
+ ip virtual-reassembly in
+interface Ethernet0/2
+ ip address 192.168.22.2 255.255.255.0
+interface Ethernet0/3
+ no ip address
+ shutdown
+!
+router bgp 65601
+ bgp log-neighbor-changes
+ network 10.120.0.0 mask 255.255.0.0
+ neighbor 192.168.22.1 remote-as 65530
+ neighbor 192.168.22.1 description PE2
+ neighbor 192.168.22.1 allowas-in
+!
+ip access-list extended NAT-ACL
+ permit ip 10.0.0.0 0.255.255.255 any
+!
+route-map NAT-RMAP permit 10
+ match ip address NAT-ACL
+ match interface Ethernet0/0
+!
+ip nat inside source route-map NAT-RMAP interface Ethernet0/0 overload
+ip route 0.0.0.0 0.0.0.0 192.168.200.1
+ip route 10.120.0.0 255.255.0.0 Null0 name BLACKHOLE
+```
