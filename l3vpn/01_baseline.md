@@ -1,17 +1,17 @@
 ## LDP (Transport) Label Signaling
-- Hello
+- **Hello**
   - UDP from int_ip to mcst-224.0.0.2
   - Contains Loopback IP in TransportAddress field
-- Initialization
+- **Initialization**
   - TCP loopback_to_loopback
   - Label Advertise e.g. DownstreamUnsolicited 
   - LoopDetection e.g. disabled
-- Keepalive
+- **Keepalive**
   - TCP loopback_to_loopback
-- Address Message
+- **Address Message**
   - TCP loopback_to_loopback
   - List of IPs on the sender_LSR
-- Label Mapping Message
+- **Label Mapping Message**
   - LSRs signal ImplicitNull 3 Labels for FEC equals to their loopbacks
   - LSR_B adds routing record for FEC=LSR_A with no label (because of PHP)
   - LSR_B generates a new label for FEC=LSR_A 
@@ -40,3 +40,54 @@
 
 
 ## MP-BGP (Service) label signaling
+- **Capabilities for MP-BGP exchanged in OPEN messages:**
+<img width="457" height="665" alt="image" src="https://github.com/user-attachments/assets/45b80ed9-522e-438a-a262-8a875fbee0a2" />
+<br>
+<br>
+
+- **RTs are transferred via ExtCommunities**
+<img width="1260" height="524" alt="image" src="https://github.com/user-attachments/assets/836bf1cd-73dd-4653-bf5b-c09724fe7a6c" />
+<br>
+<br>
+
+- **CE sends prefixes to PE**
+  - No communities:
+<img width="738" height="428" alt="image" src="https://github.com/user-attachments/assets/c8d68b9b-e740-49e3-8831-146bbde88d43" />
+<br>
+<br>
+
+- **PE propagates CE routes to core:**
+  - Extended Communities signal:
+    - Service Label (assigned by the PE as an Egress LSR)
+    - RT 
+<img width="642" height="525" alt="image" src="https://github.com/user-attachments/assets/9adca1f2-d83a-418b-b353-516a35b88b40" />
+<br>
+<br>
+
+- **Service Labels are signalled via MP_REACH_NLRI attributes:**
+<img width="796" height="410" alt="image" src="https://github.com/user-attachments/assets/7c6449e1-60d5-4e5c-beb7-74a4ae23cfe3" />
+<br>
+<br>
+
+- **PE to CE prefixes do contain ExtCommunities (is it excessive?):**
+<img width="791" height="523" alt="image" src="https://github.com/user-attachments/assets/d706ab8d-504a-42d0-8221-5e444971fdf9" />
+<br>
+<br>
+
+- **Replies to CE1 will contain CE1-generated service_label:**
+<img width="642" height="230" alt="image" src="https://github.com/user-attachments/assets/8547dd3f-8005-4f88-a1be-8cee875b8bc3" />
+
+- **Requests from CE1 to CE2 will contain:**
+  - **service_label:**
+    - PE2-generated 
+  - **transport_label:**
+    - P1-generated
+<img width="752" height="166" alt="image" src="https://github.com/user-attachments/assets/7d285845-f2db-4fd0-956a-ab1e5b6cd844" />
+
+
+
+
+
+
+
+
