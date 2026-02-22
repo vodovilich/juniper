@@ -84,6 +84,40 @@
     - P1-generated
 <img width="752" height="166" alt="image" src="https://github.com/user-attachments/assets/7d285845-f2db-4fd0-956a-ab1e5b6cd844" />
 
+## NextHopSelf works without enabling in L3VPN on PEs
+- RFC 4364
+```
+  When a PE router distributes a VPN-IPv4 route via BGP, it uses its own address as the "BGP next hop".
+```
+
+- PE2 announces BGP prefix with NextHop = `self`, without policy configuration:
+```
+root@PE2> show configuration | display set | match self
+
+root@PE2> show route advertising-protocol bgp 22.22.22.22 detail
+
+Customer1-VRF.inet.0: 5 destinations, 5 routes (5 active, 0 holddown, 0 hidden)
+* 10.120.0.0/16 (1 entry, 1 announced)
+ BGP group INT type Internal
+     Route Distinguisher: 2.2.2.2:1
+     VPN Label: 299920
+     Nexthop: Self
+     Flags: Nexthop Change
+     MED: 0
+     Localpref: 100
+     AS path: [65530] 65601 I
+     Communities: target:65530:1
+
+* 192.168.22.0/24 (1 entry, 1 announced)
+ BGP group INT type Internal
+     Route Distinguisher: 2.2.2.2:1
+     VPN Label: 299920
+     Nexthop: Self
+     Flags: Nexthop Change
+     Localpref: 100
+     AS path: [65530] I
+     Communities: target:65530:1
+```
 
 
 
