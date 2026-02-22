@@ -194,8 +194,10 @@ ip route 0.0.0.0 0.0.0.0 192.168.200.1
 ip route 10.110.0.0 255.255.0.0 Null0 name BLACKHOLE
 ip route 10.110.30.0 255.255.255.0 192.168.0.6 name L2TP clients
 ip route 192.168.200.11 255.255.255.255 Ethernet0/1.101 192.168.0.2 name L2TP Mikrotik
+```
 
 ## CE1-R2
+
 ```
 CE1-R2#
 hostname CE1-R2
