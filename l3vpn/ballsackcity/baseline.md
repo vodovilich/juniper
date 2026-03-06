@@ -191,4 +191,52 @@ bgp.l3vpn.0: 6 destinations, 9 routes (6 active, 0 holddown, 0 hidden)
   - Labels can be same by themselves but due to a coincidence:
 <img width="1417" height="400" alt="image" src="https://github.com/user-attachments/assets/12d69200-1728-4ec5-ac19-9484b676e8bd" />
 
+## Route leak between VRF
+- Create import policies policies:
+```
+set policy-options policy-statement A-to-B-POLICY term 1 from route-filter 10.10.10.255/32 exact
+set policy-options policy-statement A-to-B-POLICY term 1 then accept
+```
 
+- Create RIB groups for importing:
+```
+root@assville> show configuration routing-options rib-groups
+A-to-B {
+    import-rib [ CUSTOMER-A.inet.0 CUSTOMER-B.inet.0 ];
+    import-policy A-to-B-POLICY;
+}
+
+```
+
+- Apply RIB groups in BGP inet family unicast inside VRFs:
+```
+set routing-instances CUSTOMER-A protocols bgp group EXT family inet unicast rib-group A-to-B
+```
+
+- Verify table CUSTOMER-B contains prefix 10.10.10.255/32 from CUSTOMER-A:
+```
+root@assville> show route table CUSTOMER-B 10.0.0.0/8
+
+CUSTOMER-B.inet.0: 7 destinations, 9 routes (7 active, 0 holddown, 0 hidden)
++ = Active Route, - = Last Active, * = Both
+
+10.10.10.255/32    *[BGP/170] 21:41:42, MED 0, localpref 100
+                      AS path: 65601 I, validation-state: unverified
+                    >  to 172.16.10.10 via ge-0/0/5.0
+10.20.10.0/24      *[BGP/170] 1w1d 21:59:11, MED 0, localpref 100
+                      AS path: 65602 I, validation-state: unverified
+                    >  to 172.16.21.10 via ge-0/0/6.0
+10.20.20.0/24      *[BGP/170] 22:52:46, MED 0, localpref 100, from 3.3.3.3
+                      AS path: 65602 I, validation-state: unverified
+                    >  to 192.168.12.22 via ge-0/0/0.0, Push 299872, Push 299808(top)
+                    [BGP/170] 22:51:00, MED 0, localpref 100, from 5.5.5.5
+                      AS path: 65602 I, validation-state: unverified
+                    >  to 192.168.12.22 via ge-0/0/0.0, Push 299872, Push 299808(top)
+10.20.30.0/24      *[BGP/170] 22:52:46, MED 0, localpref 100, from 3.3.3.3
+                      AS path: 65602 I, validation-state: unverified
+                    >  to 192.168.13.33 via ge-0/0/1.0, Push 299888
+                    [BGP/170] 22:51:00, MED 0, localpref 100, from 5.5.5.5
+                      AS path: 65602 I, validation-state: unverified
+                    >  to 192.168.13.33 via ge-0/0/1.0, Push 299888
+
+```
