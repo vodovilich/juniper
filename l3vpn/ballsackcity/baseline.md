@@ -1,3 +1,9 @@
+## ballsackcity baseline:
+- **2 RRs, 2 Clusters**
+- **No Multihomed CEs**
+- **Type1 RDs**
+
+
 ## keep all
 - bgp.l3vpn table by default created on:
   - PEs
@@ -129,7 +135,7 @@ bgp.l3vpn.0: 5 destinations, 10 routes (5 active, 0 holddown, 0 hidden)
 
 ## Route Target address family
 - By default RR reflects all L3VPN routes to PEs:
-  - RDs contain all customers’ ArbitraryNumbers:
+  - **RDs contain all customers’ ArbitraryNumbers:**
 ```
 root@cumshottown_rr> show route advertising-protocol bgp 4.4.4.4 table bgp.l3vpn.0
 
@@ -167,7 +173,8 @@ bgp.rtarget.0: 2 destinations, 3 routes (2 active, 0 holddown, 0 hidden)
                        to 192.168.23.22 via ge-0/0/2.0, Push 299808
 ```
 <img width="792" height="537" alt="image" src="https://github.com/user-attachments/assets/06adbebd-3482-451b-b625-a2ad37ba76be" />
-- **RDs contain only attached customers’ ArbitraryNumbers:**
+
+- **RDs contain only attached customers’ ArbitraryNumbers:**  
 ```
 root@cumshottown_rr> show route advertising-protocol bgp 4.4.4.4 table bgp.l3vpn.0
 
@@ -180,3 +187,8 @@ bgp.l3vpn.0: 6 destinations, 9 routes (6 active, 0 holddown, 0 hidden)
 ```
 
 ## vrf-tabel-label 
+- Left - before, Right - after vrf-tabel-label:
+  - Labels can be same by themselves but due to a coincidence:
+<img width="1417" height="400" alt="image" src="https://github.com/user-attachments/assets/12d69200-1728-4ec5-ac19-9484b676e8bd" />
+
+
