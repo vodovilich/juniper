@@ -1,3 +1,4 @@
+# BGP VPLS
 ## PE1
 ```
 set version 24.2R1-S2.5
@@ -179,4 +180,30 @@ set protocols ldp interface ge-0/0/0.0
 set protocols ldp interface lo0.0
 set protocols mpls interface ge-0/0/0.0
 set protocols mpls interface lo0.0
+```
+
+# BGP VPWS
+## PE1
+```
+set routing-options router-id 1.1.1.1
+set routing-options autonomous-system 65530
+set protocols bgp group INTERNAL type internal
+set protocols bgp group INTERNAL local-address 1.1.1.1
+set protocols bgp group INTERNAL neighbor 11.11.11.11
+set protocols bgp group INTERNAL family inet unicast
+set protocols bgp group INTERNAL family l2vpn signaling
+
+set int ge-0/0/1 vlan-tagging 
+set int ge-0/0/1 encaps vlan-ccc
+set int ge-0/0/1 unit 601 encaps vlan-ccc
+set int ge-0/0/1 unit 601 vlan-id 601
+set int ge-0/0/1 unit 601 description Cust1_SiteA-SiteB
+
+[ edit routing-instance Customer01]
+set instance-type l2vpn
+set interface ge-0/0/1.601
+set route-distinguisher 1.1.1.1:1
+set vrf-target target:65530:1
+set prot l2vpn site Customer1-1 site-identifier 1
+set prot l2vpn encapsulation-type ethernet-vlan
 ```
