@@ -1,4 +1,5 @@
 ## BGP-signalled VPLS
+- **P1, P2, Core - RRs**
 - **Once a PE device receives a frame - PE creates a MAC table** (Forwarding table in junos)
 - **Dst_Mac is typically unknown for PE device**
   - Processed as **UnknownUnicast**:
