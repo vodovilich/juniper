@@ -1,5 +1,5 @@
 # FEC129 VPWS
-##PE1
+## PE1
 ```
 set system host-name PE1
 set system root-authentication encrypted-password "$6$CuDeQY0V$ny9JCYCCoQutI0YPkBJNPqTqnftP1.M2HgAevPo3b0MaYVH5MT.bvLIRwP1OZGzPfdDzJ55DXBcSDoyJdmSPb0"
@@ -44,7 +44,7 @@ set protocols ldp interface lo0.0
 set protocols mpls interface lo0.0
 set protocols mpls interface ge-0/0/0.0
 ```
-##P1
+## P1
 ```
 set system host-name P1
 set system root-authentication encrypted-password "$6$sx5A5b5O$hfT3OsI1zhmbdIwOZKzBbcj6GMPzOTimZnaY1cmQxHl2acK4qcE0iXxaa1PSZbGXHT64.WWHMvTwbc0PDvsrd0"
@@ -76,7 +76,7 @@ set protocols mpls interface ge-0/0/0.0
 set protocols mpls interface ge-0/0/1.0
 set protocols mpls interface lo0.0
 ```
-##Core
+## Core
 ```
 set system host-name Core
 set system root-authentication encrypted-password "$6$p.tenhQP$CO2Yp31K4DlkbUK7QYVNHsAdDpZHhDQwbLBxMxcrVQ6Ta7gbnrNjc6iDSROTHqwF7qH1cWF7Cg0HT.klsGR/J1"
@@ -102,7 +102,7 @@ set protocols isis interface all
 set protocols ldp interface all
 set protocols mpls interface all
 ```
-##P2
+## P2
 ```
 set system host-name P2
 set system root-authentication encrypted-password "$6$2s2uOrQ/$F3uQYV.hZbtN3emH8qXzx48.4ktjWrhqKu9AZtTOznz2LdmpF7Wk1Hn3AaP5pTRNaM9Qj57k7Dy4XjInDwhaG1"
@@ -129,7 +129,7 @@ set protocols l2circuit neighbor 1.1.1.1 interface ge-0/0/1.601 virtual-circuit-
 set protocols ldp interface all
 set protocols mpls interface all
 ```
-##PE2
+## PE2
 ```
 set system host-name PE2
 set system root-authentication encrypted-password "$6$q0PGXBnV$AWIUtAngE2PFpIkYW6wCRgQkH8QWWJXmj23sglpCA8ayP2BGwh5W5fYizciTBMgkQ2T02IonHGDCnNWFYF009/"
@@ -176,23 +176,23 @@ set protocols mpls interface lo0.0
 ```
 
 # FEC129 VPLS
-##PE1
+## PE1
 ```
 set
 ```
-##P1
+## P1
 ```
 set
 ```
-##Core
+## Core
 ```
 set
 ```
-##P2
+## P2
 ```
 set
 ```
-##PE2
+## PE2
 ```
 set
 ```
