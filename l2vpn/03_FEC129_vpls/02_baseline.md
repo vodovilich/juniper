@@ -39,6 +39,8 @@
 <img width="908" height="247" alt="image" src="https://github.com/user-attachments/assets/21286773-696d-4fea-adc3-adf9f15b0f54" />
 
 - **FEC129-VPWS LMM from PE2_site4 with 300176:**
+  - PW type: ETHERNET TAGGED MODE
+
 <img width="747" height="1013" alt="image" src="https://github.com/user-attachments/assets/75a03dd1-ea8a-4d94-b760-18448fa3a72f" />
 
 
@@ -49,4 +51,7 @@
 - Uses 2 NLRIs (Discovery NLRI, Pseudowire NLRI) and IDs to identify themselves (vozmozhno pizdezh?)
   - Who runs the same RT - can connect
   <img width="587" height="548" alt="image" src="https://github.com/user-attachments/assets/cb86d171-10f0-4eb7-a7e6-6142b5036d09" />
+
+- PW type: ETHERNET
+<img width="719" height="729" alt="image" src="https://github.com/user-attachments/assets/e76f4329-24dd-40f0-83f9-55ba7b6af623" />
 
