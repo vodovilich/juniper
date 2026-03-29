@@ -205,5 +205,6 @@ set interface ge-0/0/1.601
 set route-distinguisher 1.1.1.1:1
 set vrf-target target:65530:1
 set prot l2vpn site Customer1-1 site-identifier 1
+set prot l2vpn site Customer1-1 interface ge-0/0/1.601
 set prot l2vpn encapsulation-type ethernet-vlan
 ```
