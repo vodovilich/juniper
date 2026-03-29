@@ -177,21 +177,44 @@ set protocols mpls interface lo0.0
 # FEC129 VPLS
 ## PE1
 ```
-set
-```
-## P1
-```
-set
-```
-## Core
-```
-set
-```
-## P2
-```
-set
-```
-## PE2
-```
-set
+set version 24.2R1-S2.5
+set system host-name PE1
+set system root-authentication encrypted-password "$6$CuDeQY0V$ny9JCYCCoQutI0YPkBJNPqTqnftP1.M2HgAevPo3b0MaYVH5MT.bvLIRwP1OZGzPfdDzJ55DXBcSDoyJdmSPb0"
+set chassis fpc 0 pic 0 tunnel-services
+set interfaces ge-0/0/0 unit 0 family inet address 172.16.11.1/24
+set interfaces ge-0/0/0 unit 0 family iso
+set interfaces ge-0/0/0 unit 0 family mpls
+set interfaces ge-0/0/1 vlan-tagging
+set interfaces ge-0/0/1 encapsulation vlan-vpls
+set interfaces ge-0/0/1 unit 601 description Cust1_Site1
+set interfaces ge-0/0/1 unit 601 encapsulation vlan-vpls
+set interfaces ge-0/0/1 unit 601 vlan-id 601
+set interfaces ge-0/0/2 vlan-tagging
+set interfaces ge-0/0/2 encapsulation vlan-vpls
+set interfaces ge-0/0/2 unit 601 description Cust1_Site3
+set interfaces ge-0/0/2 unit 601 encapsulation vlan-vpls
+set interfaces ge-0/0/2 unit 601 vlan-id 601
+set interfaces lo0 unit 0 family inet address 1.1.1.1/32
+set interfaces lo0 unit 0 family iso address 49.0000.0000.0000.0001.00
+set interfaces lo0 unit 0 family mpls
+set routing-instances Customer1 instance-type vpls
+set routing-instances Customer1 l2vpn-id l2vpn-id:65530:1
+set routing-instances Customer1 protocols vpls
+set routing-instances Customer1 interface ge-0/0/1.601
+set routing-instances Customer1 interface ge-0/0/2.601
+set routing-instances Customer1 route-distinguisher 1.1.1.1:1
+set routing-instances Customer1 vrf-target target:65530:1
+set routing-options router-id 1.1.1.1
+set routing-options autonomous-system 65530
+set protocols bgp group INT type internal
+set protocols bgp group INT local-address 1.1.1.1
+set protocols bgp group INT family inet unicast
+set protocols bgp group INT family l2vpn auto-discovery-only
+set protocols bgp group INT neighbor 11.11.11.11
+set protocols isis interface ge-0/0/0.0
+set protocols isis interface lo0.0
+set protocols ldp interface ge-0/0/0.0
+set protocols ldp interface lo0.0
+set protocols mpls interface lo0.0
+set protocols mpls interface ge-0/0/0.0
 ```
