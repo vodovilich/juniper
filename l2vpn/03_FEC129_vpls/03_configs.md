@@ -125,7 +125,6 @@ set protocols bgp group INTERNAL cluster 22.22.22.22
 set protocols bgp group INTERNAL neighbor 33.33.33.33
 set protocols bgp group INTERNAL neighbor 2.2.2.2
 set protocols isis interface all
-set protocols l2circuit neighbor 1.1.1.1 interface ge-0/0/1.601 virtual-circuit-id 12
 set protocols ldp interface all
 set protocols mpls interface all
 ```
