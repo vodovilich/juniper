@@ -5,9 +5,10 @@
 - **Manual NBR specification**
 - **l2circuit.0 route table**
 <img width="507" height="137" alt="image" src="https://github.com/user-attachments/assets/255af77a-0533-482a-a93a-86cacaffa8a0" />
+
 - **Service Labels are signalled via tLDP:**
-  - Unicast LMMs
-  - FEC type: PWid FEC Element (instead of prefix FEC) 
+  - Unicast LMMs  
+  - **FEC type: PWid FEC Element (instead of prefix FEC)**
 
 ```
 root@PE1> show route table mpls | last 2
