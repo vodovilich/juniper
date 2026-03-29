@@ -8,7 +8,7 @@
 
 - **Service Labels are signalled via tLDP:**
   - Unicast LMMs  
-  - **FEC type: PWid FEC Element (instead of prefix FEC)**
+  - **FEC type: PWid FEC Element - type128 (instead of prefix FEC - type 2)**
 
 ```
 root@PE1> show route table mpls | last 2
