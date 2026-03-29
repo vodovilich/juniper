@@ -8,7 +8,6 @@
 
 - **Service Labels are signalled via tLDP:**
   - Unicast LMMs  
-  - **FEC type: PWid FEC Element - type128 (instead of prefix FEC - type 2)**
 
 ```
 root@PE1> show route table mpls | last 2
@@ -102,6 +101,7 @@ Edge protection: Not-Primary
         Description: Intf - vpls Customer1 neighbor 1.1.1.1 vpls-id 100
       Flow Label Transmit: No, Flow Label Receive: No
 ```
-- Service Labels are signalled via tLDP:
+- **Service Labels are signalled via tLDP**:
+  - **FEC type: PWid FEC Element - type128 (instead of prefix FEC - type 2)**
 <img width="613" height="508" alt="image" src="https://github.com/user-attachments/assets/bfff4ff7-a9eb-4cc2-86e3-ca5f2a3a32bb" />
 
