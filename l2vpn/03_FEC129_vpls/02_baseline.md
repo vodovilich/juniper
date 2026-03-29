@@ -45,3 +45,8 @@
 
 
 # FEC129 VPLS
+- Better because of no manual NBR definition
+- Uses 2 NLRIs (Discovery NLRI, Pseudowire NLRI) and IDs to identify themselves (vozmozhno pizdezh?)
+  - Who runs the same RT - can connect
+  <img width="587" height="548" alt="image" src="https://github.com/user-attachments/assets/cb86d171-10f0-4eb7-a7e6-6142b5036d09" />
+
