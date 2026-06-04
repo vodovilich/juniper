@@ -220,3 +220,90 @@ Limit/Threshold: 1048576/1048576 destinations
 192.168.200.10/32  *[EVPN/7] 12:42:15
                     >  via irb.200
 ```
+
+- show vlans:
+```
+root@LEAF4> show vlans
+
+Routing instance        VLAN name             Tag          Interfaces
+default-switch          DATA100               100
+                                                           esi.636*
+                                                           ge-0/0/9.0*
+                                                           vtep.32769*
+                                                           vtep.32770*
+default-switch          DATA200               200
+                                                           esi.637*
+                                                           ge-0/0/8.0*
+                                                           vtep.32769*
+                                                           vtep.32770*
+default-switch          default               1
+
+
+```
+- MAC table:
+```
+root@LEAF4> show ethernet-switching table
+
+MAC flags (S - static MAC, D - dynamic MAC, L - locally learned, P - Persistent static, C - Control MAC
+           SE - statistics enabled, NM - non configured MAC, R - remote PE MAC, O - ovsdb MAC,
+           B - Blocked MAC)
+
+
+Ethernet switching table : 8 entries, 8 learned
+Routing instance : default-switch
+   Vlan                MAC                 MAC       GBP    Logical                SVLBNH/      Active
+   name                address             flags     tag    interface              VENH Index   source
+   DATA100             00:50:79:66:68:0d   DR               vtep.32769                          3.3.3.3
+   DATA100             00:50:79:66:68:0e   D                ge-0/0/9.0
+   DATA100             10:bb:cc:dd:ee:ff   DRP              esi.636                             05:00:00:ff:fa:00:00:4e:84:00
+   DATA100             2c:6b:f5:67:1b:f0   DR               vtep.32769                          3.3.3.3
+   DATA200             00:50:79:66:68:0f   D                ge-0/0/8.0
+   DATA200             00:50:79:66:68:10   DR               vtep.32770                          5.5.5.5
+   DATA200             20:bb:cc:dd:ee:ff   DRP              esi.637                             05:00:00:ff:fa:00:00:4e:e8:00
+   DATA200             2c:6b:f5:8f:aa:f0   DR               vtep.32770                          5.5.5.5
+
+```
+- EVPN database:
+```
+
+root@LEAF4> show evpn database
+Instance: default-switch
+VLAN  DomainId  MAC address        Active source                  Timestamp        IP address
+     20100      00:50:79:66:68:0d  3.3.3.3                        Jun 02 16:51:27  192.168.100.10
+     20100      00:50:79:66:68:0e  ge-0/0/9.0                     Jun 04 12:31:40  192.168.100.20
+     20100      10:bb:cc:dd:ee:ff  05:00:00:ff:fa:00:00:4e:84:00  Jun 02 16:51:27  192.168.100.1
+     20100      2c:6b:f5:67:1b:f0  3.3.3.3                        Jun 02 16:51:27  192.168.100.33
+     20100      2c:6b:f5:93:73:f0  irb.100                        Jun 01 16:44:49  192.168.100.44
+     20200      00:50:79:66:68:0f  ge-0/0/8.0                     Jun 04 12:31:48  192.168.200.10
+     20200      00:50:79:66:68:10  5.5.5.5                        Jun 02 18:57:47  192.168.200.20
+     20200      20:bb:cc:dd:ee:ff  05:00:00:ff:fa:00:00:4e:e8:00  Jun 02 16:51:27  192.168.200.1
+     20200      2c:6b:f5:8f:aa:f0  5.5.5.5                        Jun 02 16:51:27  192.168.200.55
+     20200      2c:6b:f5:93:73:f0  irb.200                        Jun 01 16:44:49  192.168.200.44
+
+```
+- vxlan commands are under ethernet-switching level:
+```
+
+root@LEAF4> show ethernet-switching vxlan-tunnel-end-point source
+Logical System Name       Id  SVTEP-IP         IFL   L3-Idx    SVTEP-Mode    ELP-SVTEP-IP
+<default>                 0   4.4.4.4          lo0.0    0
+    L2-RTT                   Bridge Domain              VNID     Translation-VNID    MC-Group-IP    Interface
+    default-switch           DATA100+100                20100                        0.0.0.0             vtep.32768
+    default-switch           DATA200+200                20200                        0.0.0.0             vtep.32768
+```
+```
+root@LEAF4> show ethernet-switching vxlan-tunnel-end-point remote
+Logical System Name       Id  SVTEP-IP         IFL   L3-Idx    SVTEP-Mode    ELP-SVTEP-IP
+<default>                 0   4.4.4.4          lo0.0    0
+ RVTEP-IP         L2-RTT                   IFL-Idx   Interface    NH-Id   RVTEP-Mode  ELP-IP        Flags
+ 3.3.3.3          default-switch           350       vtep.32769   634     RNVE
+    VNID          MC-Group-IP
+    20100         0.0.0.0
+    20200         0.0.0.0
+ RVTEP-IP         L2-RTT                   IFL-Idx   Interface    NH-Id   RVTEP-Mode  ELP-IP        Flags
+ 5.5.5.5          default-switch           353       vtep.32770   635     RNVE
+    VNID          MC-Group-IP
+    20100         0.0.0.0
+    20200         0.0.0.0
+
+```
