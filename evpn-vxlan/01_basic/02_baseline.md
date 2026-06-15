@@ -1,5 +1,5 @@
 - No VRF configured
-- Spine1 adn Spine2 are RRs with unique clusters
+- Spine1 and Spine2 are RRs with unique clusters
 - Two VLANs:
   - VLANID: 100; VNI: 20100
   - VLANID: 200; VNI: 20200
