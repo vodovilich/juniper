@@ -1,5 +1,6 @@
 
 <img width="675" height="855" alt="01_mclag_scheme" src="https://github.com/user-attachments/assets/2aaff67f-2cbc-4f61-a4c8-28a989f22587" />
+
 - Gateways - on Spines
 - MC-AE - configured for downstream
   - For upstream - usual LAG
