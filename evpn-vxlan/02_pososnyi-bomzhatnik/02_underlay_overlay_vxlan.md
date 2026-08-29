@@ -92,14 +92,83 @@ set policy-options policy-statement LOAD-BALANCE term 1 then load-balance per-fl
 set routing-options forwarding-table export LOAD-BALANCE
 ```
 ### OVERLAY - IBGP
-- 
+- ASN 65500
+#### SPINE1
+```
+set protocols bgp group OVERLAY local-address 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.2
+set protocols bgp group OVERLAY neighbor 192.168.1.3
+set protocols bgp group OVERLAY neighbor 192.168.1.4
+set protocols bgp group OVERLAY neighbor 192.168.1.5
+```
+#### SPINE2
+```
+set protocols bgp group OVERLAY local-address 192.168.1.2
+set protocols bgp group OVERLAY neighbor 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.3
+set protocols bgp group OVERLAY neighbor 192.168.1.4
+set protocols bgp group OVERLAY neighbor 192.168.1.5
+```
+#### LEAF3
+```
+set protocols bgp group OVERLAY local-address 192.168.1.3
+set protocols bgp group OVERLAY neighbor 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.2
+set protocols bgp group OVERLAY neighbor 192.168.1.4
+set protocols bgp group OVERLAY neighbor 192.168.1.5
+```
+#### LEAF4
+```
+set protocols bgp group OVERLAY local-address 192.168.1.4
+set protocols bgp group OVERLAY neighbor 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.2
+set protocols bgp group OVERLAY neighbor 192.168.1.3
+set protocols bgp group OVERLAY neighbor 192.168.1.5
+```
+#### LEAF5
+```
+set protocols bgp group OVERLAY local-address 192.168.1.5
+set protocols bgp group OVERLAY neighbor 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.2
+set protocols bgp group OVERLAY neighbor 192.168.1.3
+set protocols bgp group OVERLAY neighbor 192.168.1.4
+```
+#### ALL DEVICES
+```
+set protocols bgp group OVERLAY local-as 65500
+set protocols bgp group OVERLAY type internal
+set protocols bgp group OVERLAY family evpn signaling
+set protocols bgp group OVERLAY bfd-liveness-detection minimum-interval 2000
+set protocols bgp group OVERLAY bfd-liveness-detection multiplier 3
+set protocols bgp group OVERLAY multipath
 ```
 
-```
 ### ENABLE VXLAN
+#### LEAF3
+```
+set switch-options route-distinguisher 192.168.1.3:65500
+```
+#### LEAF4
+```
+set switch-options route-distinguisher 192.168.1.4:65500
+```
+#### LEAF5
+```
+set switch-options route-distinguisher 192.168.1.5:65500
+```
+#### ALL DEVICES
+```
+set switch-options vtep-source-interface lo0.0
+set switch-options vrf-target target:65500:1
 
+#A policy to decide what EVPN routes are accepted from BGP peers
+set policy-options community FABRIC-RT members target:65500:1
+set policy-options policy-statement FABRIC-IMPORT term ACCEPT-RT from protocol bgp
+set policy-options policy-statement FABRIC-IMPORT term ACCEPT-RT from community FABRIC-RT
+set policy-options policy-statement FABRIC-IMPORT term ACCEPT-RT then accept
+set switch-options vrf-import  FABRIC-IMPORT 
 
-### GlobalParams
+set protocols evpn encapsulation vxlan
+set protocols evpn multicast-mode ingress-replication
+```
 
-
-# GlobalParams
