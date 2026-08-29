@@ -13,6 +13,9 @@
   - S9 - dual-homed 
 - **L3 GW: Virtual Gateway (Redundant L3 VXLAN Gateway) on Spines**
 
+<img width="1126" height="982" alt="image" src="https://github.com/user-attachments/assets/92ea4a6f-bd7f-4a73-b1f3-00f10014233f" />
+
+
 ### UNDERLAY - EBGP
 #### SPINE1
 ```
