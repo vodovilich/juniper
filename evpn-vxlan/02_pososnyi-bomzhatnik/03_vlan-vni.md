@@ -194,7 +194,7 @@ Instance: default-switch
 ```
 - View Type2 advertisements:
   - Communities used:
-    - RT configured for VNI: target:65500:100
+    - RT configured for VNI: target:65500:5100
     - Encapsulation: VXLAN
   - ESI in single-homed: all-zeros
 
