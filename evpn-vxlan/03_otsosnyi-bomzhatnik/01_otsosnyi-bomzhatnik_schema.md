@@ -1,0 +1,32 @@
+- **UNDERLAY: OSPF**
+- **OVERLAY: IBGP**
+  - RRs on SPINEs
+    - Different CLUSTER-IDs
+    - No multipath
+- **2 Spines, 3 Leaves**
+- **1 EVI: VLAN-AWARE on Spines**
+  - RoutingInstanse VLAN-AWARE_FABRIC-EVI on Spines = GRT on Leaves
+- **11 VXLAN Segments:**
+  - vlan100 | vni5100 | RT: auto
+  - vlan101 | vni5101 | RT: auto
+  - vlan102 | vni5102 | RT: auto
+  - vlan103 | vni5103 | RT: auto
+  - vlan104 | vni5104 | RT: auto
+  - vlan105 | vni5105 | RT: target:65500:5105
+  - vlan106 | vni5106 | RT: target:65500:5106
+  - vlan107 | vni5107 | RT: target:65500:5107
+  - vlan108 | vni5108 | RT: target:65500:5108
+  - vlan109 | vni5109 | RT: target:65500:5109
+  - vlan110 | vni5110 | RT: target:65500:5110
+- **L3 GW: Virtual Gateway (Redundant L3 VXLAN Gateway) on Spines**
+  - **5100-5104 - Virtual Gateway**
+  - **5105-5108 - Unicast GW on SPINEs**
+    - 5105-5106 - SPINE1
+    - 5107-5108 - SPINE2
+  - **5109-5110 - Anycast GW on SPINEs (Manual GW Sync)**
+    - IP+MAC
+- **4 Servers:**
+  - S6,S7,S8 - single-homed
+  - S9 - dual-homed 
+
+<img width="1988" height="1092" alt="image" src="https://github.com/user-attachments/assets/1ccf27aa-e6dc-4e8c-8677-707952d39089" />
