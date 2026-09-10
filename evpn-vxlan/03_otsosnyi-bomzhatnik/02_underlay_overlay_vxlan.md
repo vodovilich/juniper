@@ -1,0 +1,196 @@
+## UNDERLAY: OSPF
+- BGP by default (without multipath enabled) installs only one best route
+- OSPF by default installs multiple equal-cost best routes (like BGP with multipath enabled)
+- Number of routes is set via  `set chassis maximum-ecmp directive`:
+```
+root@SPINE1# set chassis maximum-ecmp ?
+Possible completions:
+  16                   Maximum 16 ECMP routes
+  32                   Maximum 32 ECMP routes
+  64                   Maximum 64 ECMP routes
+  96                   Maximum 96 ECMP routes
+  128                  Maximum 128 ECMP routes
+```
+
+#### Both SPINE1 and SPINE2
+```
+set policy-opt policy-stat LOAD-BALANCE-POLICY term LOAD-BALANCE then load-balance per-flow
+set routing-options forwarding-table export LOAD-BALANCE-POLICY
+!
+set protocols ospf area 0.0.0.0 interface ge-0/0/3.0 interface-type p2p
+set protocols ospf area 0.0.0.0 interface ge-0/0/3.0 bfd-liveness-detection minimum-interval 2000
+set protocols ospf area 0.0.0.0 interface ge-0/0/3.0 bfd-liveness-detection multiplier 5
+set protocols ospf area 0 interface ge-0/0/3.0 authentication md5 1 key OSPFSECRET
+!
+set protocols ospf area 0.0.0.0 interface ge-0/0/4.0 interface-type p2p
+set protocols ospf area 0.0.0.0 interface ge-0/0/4.0 bfd-liveness-detection minimum-interval 2000
+set protocols ospf area 0.0.0.0 interface ge-0/0/4.0 bfd-liveness-detection multiplier 5
+set protocols ospf area 0 interface ge-0/0/4.0 authentication md5 1 key OSPFSECRET
+!
+set protocols ospf area 0.0.0.0 interface ge-0/0/5.0 interface-type p2p
+set protocols ospf area 0.0.0.0 interface ge-0/0/5.0 bfd-liveness-detection minimum-interval 2000
+set protocols ospf area 0.0.0.0 interface ge-0/0/5.0 bfd-liveness-detection multiplier 5
+set protocols ospf area 0 interface ge-0/0/5.0 authentication md5 1 key OSPFSECRET
+!
+set protocols ospf area 0.0.0.0 interface lo0.0 passive
+```
+
+#### All three LEAVEs
+```
+set policy-opt policy-stat LOAD-BALANCE-POLICY term LOAD-BALANCE then load-balance per-flow
+set routing-options forwarding-table export LOAD-BALANCE-POLICY
+!
+set protocols ospf area 0.0.0.0 interface ge-0/0/1.0 interface-type p2p
+set protocols ospf area 0.0.0.0 interface ge-0/0/1.0 bfd-liveness-detection minimum-interval 2000
+set protocols ospf area 0.0.0.0 interface ge-0/0/1.0 bfd-liveness-detection multiplier 5
+set protocols ospf area 0 interface ge-0/0/1.0 authentication md5 1 key OSPFSECRET
+!
+set protocols ospf area 0.0.0.0 interface ge-0/0/2.0 interface-type p2p
+set protocols ospf area 0.0.0.0 interface ge-0/0/2.0 bfd-liveness-detection minimum-interval 2000
+set protocols ospf area 0.0.0.0 interface ge-0/0/2.0 bfd-liveness-detection multiplier 5
+set protocols ospf area 0 interface ge-0/0/2.0 authentication md5 1 key OSPFSECRET
+!
+set protocols ospf area 0.0.0.0 interface lo0.0 passive
+```
+
+## OVERLAY: IBGP
+- ASN 65500
+- RRs on Spines
+  - Different CLUSTER-IDs
+- No Multipath enabled
+
+#### SPINE1
+```
+set routing-options router-id 192.168.1.1
+set protocols bgp group OVERLAY local-address 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.2
+set protocols bgp group OVERLAY neighbor 192.168.1.3
+set protocols bgp group OVERLAY neighbor 192.168.1.4
+set protocols bgp group OVERLAY neighbor 192.168.1.5
+set protocols bgp group OVERLAY cluster 192.168.1.1
+```
+#### SPINE2
+```
+set routing-options router-id 192.168.1.2
+set protocols bgp group OVERLAY local-address 192.168.1.2
+set protocols bgp group OVERLAY neighbor 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.3
+set protocols bgp group OVERLAY neighbor 192.168.1.4
+set protocols bgp group OVERLAY neighbor 192.168.1.5
+set protocols bgp group OVERLAY cluster 192.168.1.2
+```
+#### LEAF3
+```
+set routing-options router-id 192.168.1.3
+set protocols bgp group OVERLAY local-address 192.168.1.3
+set protocols bgp group OVERLAY neighbor 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.2
+```
+#### LEAF4
+```
+set routing-options router-id 192.168.1.4
+set protocols bgp group OVERLAY local-address 192.168.1.4
+set protocols bgp group OVERLAY neighbor 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.2
+```
+#### LEAF5
+```
+set routing-options router-id 192.168.1.5
+set protocols bgp group OVERLAY local-address 192.168.1.5
+set protocols bgp group OVERLAY neighbor 192.168.1.1
+set protocols bgp group OVERLAY neighbor 192.168.1.2
+```
+#### All Routers:
+```
+set routing-options autonomous-system 65500
+set protocols bgp group OVERLAY local-as 65500
+set protocols bgp group OVERLAY type internal
+set protocols bgp group OVERLAY family evpn signaling
+set protocols bgp group OVERLAY bfd-liveness-detection minimum-interval 2000
+set protocols bgp group OVERLAY bfd-liveness-detection multiplier 3
+#set protocols bgp group OVERLAY multipath - no multipath 
+```
+
+## Enable VXLAN
+- RT target:65500:1 for Overlay
+- VXLAN segments should carry an RT community that differs from the fabric community
+  - Can be done manually or autogenerated
+- Overlay allowed to import VXLAN segments that do not have explicitly defined target communities
+  - Autogenerated policy that imports autogenerated generated RTs
+- `set switch-options vrf-target auto` direcive:
+  - Enables automatic RT assignment for created VXLAN segments
+    - Autogenerated RTs are based on ASN, so
+      - Every Overlay device needs to have the same ASN configured
+  - Creates an autogenerated policy, that accepts global RT:
+```
+root@LEAF3# run show policy __evpn-import-autoderive-default-switch-internal__
+Policy __evpn-import-autoderive-default-switch-internal__: [CHANGED/RESOLVED/EVPN_VXLAN_AUTO]
+    Term unnamed:
+        from
+             community __vrf-community-default-switch-common-internal__ [target:65500:1]
+        then
+               accept
+    Term unnamed:
+        then
+               reject
+```
+- After `set switch-options vrf-import FABRIC-IMPORT` the autogenerated policy updates its `accept` term:
+```
+root@LEAF3# run show policy __evpn-import-autoderive-default-switch-internal__
+Policy __evpn-import-autoderive-default-switch-internal__: [CHANGED/RESOLVED/EVPN_VXLAN_AUTO]
+    Term unnamed:
+        from
+             policy FABRIC-IMPORT
+        then
+               accept
+    Term unnamed:
+        then
+               reject
+```
+- For every VXLAN segment, another term is added before the reject term
+#### LEAF3
+`set switch-options route-distinguisher 192.168.1.3:65500`
+#### LEAF4
+`set switch-options route-distinguisher 192.168.1.4:65500`
+#### LEAF5
+`set switch-options route-distinguisher 192.168.1.5:65500`
+#### All LEAVEs
+```
+set switch-options vtep-source-interface lo0.0
+set switch-options vrf-target target:65500:1
+set switch-options vrf-target auto
+
+#A policy to decide what EVPN routes are accepted from BGP peers
+set policy-options community FABRIC-RT members target:65500:1
+set policy-options policy-statement FABRIC-IMPORT term ACCEPT-RT from community FABRIC-RT
+set policy-options policy-statement FABRIC-IMPORT term ACCEPT-RT then accept
+set switch-options vrf-import FABRIC-IMPORT 
+
+set protocols evpn encapsulation vxlan
+set protocols evpn multicast-mode ingress-replication
+set protocols evpn extended-vni-list all
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
