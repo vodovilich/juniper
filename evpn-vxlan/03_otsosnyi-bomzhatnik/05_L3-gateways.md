@@ -66,3 +66,165 @@ set int irb.109 mac aa:aa:aa:aa:aa:09
 set int irb.110 fam inet address 10.200.110.254/24
 set int irb.110 mac aa:aa:aa:aa:aa:10
 ```
+
+### SPINEs automatically create ESIs for EVPN L3 IRBs:
+- SPINE2 participates in 10 ESIs:
+```
+root@SPINE2> show evpn instance esi-info
+Instance: VLAN-AWARE_FABRIC-EVI
+  Number of ethernet segments: 10
+    ESI: 00:00:00:00:00:00:00:00:00:09 
+      Status: Resolved
+      State-Bitfield: 0x1
+      ESI Refcount: 8
+      ESI Num Macs: 8, ESI Num SGDBs: 0
+      Number of remote PEs connected: 2
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.4      5100       0               all-active
+        192.168.1.5      5100       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:ec:00 
+      State-Bitfield: 0x43
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of Local interfaces: 1
+      Local interface: irb.100, Status: Up/Forwarding
+      Number of remote PEs connected: 1
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5100       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:ed:00
+      State-Bitfield: 0x43
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of Local interfaces: 1
+      Local interface: irb.101, Status: Up/Forwarding
+      Number of remote PEs connected: 1
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5101       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:ee:00
+      State-Bitfield: 0x43
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of Local interfaces: 1
+      Local interface: irb.102, Status: Up/Forwarding
+      Number of remote PEs connected: 1
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5102       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:ef:00
+      State-Bitfield: 0x43
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of Local interfaces: 1
+      Local interface: irb.103, Status: Up/Forwarding
+      Number of remote PEs connected: 1
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5103       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:f0:00
+      State-Bitfield: 0x43
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of Local interfaces: 1
+      Local interface: irb.104, Status: Up/Forwarding
+      Number of remote PEs connected: 1
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5104       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:f3:00
+      State-Bitfield: 0x43
+      ESI Refcount: 0
+      ESI Num Macs: 0, ESI Num SGDBs: 0
+      Number of Local interfaces: 1
+      Local interface: irb.107, Status: Up/Forwarding
+    ESI: 05:00:00:ff:dc:00:00:13:f4:00
+      State-Bitfield: 0x43
+      ESI Refcount: 0
+      ESI Num Macs: 0, ESI Num SGDBs: 0
+      Number of Local interfaces: 1
+      Local interface: irb.108, Status: Up/Forwarding
+    ESI: 05:00:00:ff:dc:00:00:13:f5:00
+      State-Bitfield: 0x43
+      ESI Refcount: 0
+      ESI Num Macs: 0, ESI Num SGDBs: 0
+      Number of Local interfaces: 1
+      Local interface: irb.109, Status: Up/Forwarding
+    ESI: 05:00:00:ff:dc:00:00:13:f6:00
+      State-Bitfield: 0x43
+      ESI Refcount: 0
+      ESI Num Macs: 0, ESI Num SGDBs: 0
+      Number of Local interfaces: 1
+      Local interface: irb.110, Status: Up/Forwarding
+```
+- SPINE1 has Type1s from SPINE2: 
+```
+root@SPINE1> show route | match "1:192.168.1.2.*ES"
+1:192.168.1.2:0::050000ffdc000013ec00::FFFF:FFFF/192 AD/ESI
+1:192.168.1.2:0::050000ffdc000013ed00::FFFF:FFFF/192 AD/ESI
+1:192.168.1.2:0::050000ffdc000013ee00::FFFF:FFFF/192 AD/ESI
+1:192.168.1.2:0::050000ffdc000013ef00::FFFF:FFFF/192 AD/ESI
+1:192.168.1.2:0::050000ffdc000013f000::FFFF:FFFF/192 AD/ESI
+1:192.168.1.2:0::050000ffdc000013ec00::FFFF:FFFF/192 AD/ESI
+1:192.168.1.2:0::050000ffdc000013ed00::FFFF:FFFF/192 AD/ESI
+1:192.168.1.2:0::050000ffdc000013ee00::FFFF:FFFF/192 AD/ESI
+1:192.168.1.2:0::050000ffdc000013ef00::FFFF:FFFF/192 AD/ESI
+1:192.168.1.2:0::050000ffdc000013f000::FFFF:FFFF/192 AD/ESI
+```
+- LEAVEs have only ESIs from distibuted anycast GWs 5100-5104, and not for 5105-5110:
+```
+root@LEAF3> show evpn instance esi-info
+Instance: __default_evpn__
+
+Instance: default-switch
+  Number of ethernet segments: 6
+    ESI: 00:00:00:00:00:00:00:00:00:09
+      Status: Resolved
+      State-Bitfield: 0x1
+      ESI Refcount: 10
+      ESI Num Macs: 10, ESI Num SGDBs: 0
+      Number of remote PEs connected: 2
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.4      5100       0               all-active
+        192.168.1.5      5100       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:ec:00
+      Status: Resolved
+      State-Bitfield: 0x1
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of remote PEs connected: 2
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5100       0               all-active
+        192.168.1.2      5100       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:ed:00
+      Status: Resolved
+      State-Bitfield: 0x1
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of remote PEs connected: 2
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5101       0               all-active
+        192.168.1.2      5101       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:ee:00
+      Status: Resolved
+      State-Bitfield: 0x1
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of remote PEs connected: 2
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5102       0               all-active
+        192.168.1.2      5102       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:ef:00
+      Status: Resolved
+      State-Bitfield: 0x1
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of remote PEs connected: 2
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5103       0               all-active
+        192.168.1.2      5103       0               all-active
+    ESI: 05:00:00:ff:dc:00:00:13:f0:00
+      Status: Resolved
+      State-Bitfield: 0x1
+      ESI Refcount: 1
+      ESI Num Macs: 1, ESI Num SGDBs: 0
+      Number of remote PEs connected: 2
+        Remote-PE        MAC-label  Aliasing-label  Mode
+        192.168.1.1      5104       0               all-active
+        192.168.1.2      5104       0               all-active
+```
