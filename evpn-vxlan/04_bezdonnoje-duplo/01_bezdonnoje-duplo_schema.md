@@ -7,7 +7,7 @@
   - Multipath + Load Balance on COREs and LEAVEs
 - **2 Cores, 2 Spines, 3 Leaves**
 - **1 EVI: VLAN-AWARE on COREs**
-  - RoutingInstanse VLAN-AWARE_FABRIC-EVI on Spines = GRT on Leaves
+  - RoutingInstanse VLAN-AWARE_FABRIC-EVI on COREs = GRT on Leaves
 - **3 VXLAN Segments:**
   - vlan220 | vni5220 | RT: auto
     - No L3 GW
