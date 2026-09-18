@@ -1,0 +1,33 @@
+- **UNDERLAY: Multi-level EBGP**
+  - CORE: ASN=65100
+  - SPINE: ASN=65200
+  - LEAF: ASN=65300
+- **OVERLAY: IBGP on only LEAVEs and COREs**
+  - No RRs => Full mesh
+  - Multipath + Load Balance on COREs and LEAVEs
+- **2 Cores, 2 Spines, 3 Leaves**
+- **1 EVI: VLAN-AWARE on COREs**
+  - RoutingInstanse VLAN-AWARE_FABRIC-EVI on Spines = GRT on Leaves
+- **3 VXLAN Segments:**
+  - vlan220 | vni5220 | RT: auto
+    - No L3 GW
+    - Endpoints on S9, S11
+      - L2 connectivity 
+  - vlan230 | vni5230 | RT: auto
+    - Bezdonnoje duplo - yanihujaneponel - L2 ot'jebnulsya a tunneling ne nastraivaetsa - nahuja togda nipanyatna
+  - vlan240 | vni5240 | RT: target:65500:5240
+    - VXLAN Virtual Gateway on COREs
+- **5 Servers:**
+  - S8,S11,S12 - single-homed
+  - S9, S10 - dual-homed
+- **12 VLAN/IP segments:**
+  - 110-115:
+    - Endpoints on S8
+    - L3 Ucst GW on LEAF3
+    - Distributed into UNDERLAY
+  - 130-135:
+    - Endpoints on S12
+    - L3 Ucst GW on LEAF5
+    - Distributed into UNDERLAY
+
+<img width="1100" height="887" alt="image" src="https://github.com/user-attachments/assets/4d16092d-990a-4dc6-8bde-2bff734493c9" />
