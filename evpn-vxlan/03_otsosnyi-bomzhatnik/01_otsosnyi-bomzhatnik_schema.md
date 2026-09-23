@@ -19,7 +19,7 @@
   - vlan109 | vni5109 | RT: target:65500:5109
   - vlan110 | vni5110 | RT: target:65500:5110
 - **L3 GW: Virtual Gateway (Redundant L3 VXLAN Gateway) on Spines**
-  - **5100-5104 - Virtual Gateway**
+  - **5100-5104 - Virtual Gateway on SPINEs**
   - **5105-5108 - Unicast GW on SPINEs**
     - 5105-5106 - SPINE1
     - 5107-5108 - SPINE2
