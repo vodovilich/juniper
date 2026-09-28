@@ -116,16 +116,16 @@ Success rate is 100 percent (5/5), round-trip min/avg/max = 1/1/2 ms
 - **EVPN + L3VPN config:**
   - IP address on IRB
   - GE subinterface encapsulation =  vlan-bridge
-  - EVPN Routing-Instance:
+  - **EVPN Routing-Instance:**
     - routing-interface = IRB
     - interface = GE.SUBINT **//L2VPN takes L2 interface**
-  - L3VPN Routing-Instance:
+  - **L3VPN Routing-Instance:**
     - interface = IRB
 - **L3VPN only config:**
   - No IRB
   - IP address on GE.SUBINT
   - No GE subinterface encapsulation
-  - L3VPN Routing-Instance:
+  - **L3VPN Routing-Instance:**
     - interface = GE.SUBINT **//L3VPN takes L3 interface (cab be GRT)**
 
 ### L2 EVPN
