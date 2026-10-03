@@ -1,18 +1,18 @@
 **2 DCs**  
-- Assville
-- Ballsackcity
+- **Assville**
+- **Ballsackcity**
 **Servers - kind of DC-owned hypervisors**
 
 **Each DC has 2 EVIs:**
-- VLAN-Aware with 3 EVPN segments:
+- **VLAN-Aware** with 3 EVPN segments:
   - vlan11 | RT=target:65500:11 
   - vlan12 | RT=target:65500:12  
   - vlan13 | RT=target:65500:13 
 
-- VLAN-Based:
-- Assville
+**VLAN-Based:**
+- **Assville**
   - vlan100 on all PEs | RT=target:65500:100200 
-- Ballsackcity
+- **Ballsackcity**
   - vlan200 on PE1,PE2 | RT=target:65500:100200
 
 **DC provides three L2-domains-per-DC with repeating addressing and L3 GWs:**
