@@ -9,11 +9,11 @@
   - vlan12 | RT=target:65500:12  
   - vlan13 | RT=target:65500:13 
 
-**VLAN-Based:**
-- **Assville**
-  - vlan100 on all PEs | RT=target:65500:100200 
-- **Ballsackcity**
-  - vlan200 on PE1,PE2 | RT=target:65500:100200
+- **VLAN-Based:**
+  - **Assville**
+    - vlan100 on all PEs | RT=target:65500:100200 
+  - **Ballsackcity**
+    - vlan200 on PE1,PE2 | RT=target:65500:100200
 
 **DC provides three L2-domains-per-DC with repeating addressing and L3 GWs:**
 - **Assville** on PE1, PE2:
