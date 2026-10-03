@@ -1,4 +1,4 @@
-# EVPN/MPLS
+# MPLS EVPN
 ## L3VPN node roles are skukozheny into one PE device 
 - **PE[1234] = CE + PE => ISP Core and DC kind of considered co-owned ili gde blyat ili sho nahui**
   - No CE-PE routing (CE defaults to L3 GW)
