@@ -39,6 +39,8 @@ set routing-instances L3VPN-13 instance-type vrf
 set routing-instances L3VPN-13 interface irb.13
 set routing-instances L3VPN-13 vrf-target target:65500:13
 set routing-instances L3VPN-13 vrf-table-label
+!
+set protocols ospf area 0.0.0.0 interface irb.11 passive
 ```
 #### PE3
 ```
